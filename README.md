@@ -1,2 +1,2 @@
-# TesteCBMarvel
-<p>Teste utilizando API REST da Marvel para trazer heróis</p>
+# desafio-android
+<p>Utilizando APIs da Marvel para listar personagens</p>
