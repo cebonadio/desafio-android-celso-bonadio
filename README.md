@@ -1,2 +1,2 @@
 # desafio-android
-<p>Utilizando APIs da Marvel para listar os personagens</p>
+<p>Utilizando APIs da Marvel para listar personagens</p>
