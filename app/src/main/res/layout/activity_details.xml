@@ -1,119 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constr_Layout_detalhes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.DetalhesPersonagemActivity"
-    android:orientation="vertical">
+    android:visibility="visible"
+    tools:context=".view.DetalhesPersonagemActivity">
 
     <Button
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:id="@+id/details_Reload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Carregar novamente"
-        android:textSize="20dp"
-        android:textColor="#fff"
-        android:padding="10dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
         android:background="@drawable/reload"
-        android:visibility="gone"
-        android:id="@+id/details_Reload"/>
+        android:padding="10dp"
+        android:text="@string/carregar_novamente"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:visibility="gone" />
+
 
     <ImageView
         android:id="@+id/det_img_personagem"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/ic_launcher_foreground"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_width="300dp"
-        android:layout_height="300dp" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/placeholder"
+        android:cropToPadding="true"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <TextView
+        android:id="@+id/det_txt_nome_personagem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txt_vazio"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/det_img_personagem" />
+
+    <TextView
+        android:id="@+id/det_txt_descricao_personagem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="8"
+        android:orientation="vertical"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbars="vertical"
+        android:text="@string/txt_vazio"
+        android:textColor="@color/colorBlack"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        android:verticalScrollbarPosition="right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/det_txt_nome_personagem" />
 
     <Button
         android:id="@+id/ver_revista_mais_cara"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/reload"
         android:padding="10dp"
-        android:text="Revista mais cara"
+        android:text="@string/revista_mais_cara"
         android:textColor="#fff"
-        android:textSize="10dp"
-        android:visibility="visible" />
-
-    <TextView
-        android:id="@+id/det_txt_nome_personagem"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        tools:text="-" />
-
-    <TextView
-        android:id="@+id/det_txt_descricao_personagem"
-        android:layout_width="match_parent"
-        android:layout_height="91dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/colorBlack"
         android:textSize="12sp"
-        android:textStyle="normal"
-        tools:text="-" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/det_txt_descricao_personagem" />
 
-    <!--
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Comics:"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="20sp"/>
-    -->
+</android.support.constraint.ConstraintLayout>
 
-
-    <!--
-        <LinearLayout
-                android:id="@+id/details_loading"
-                android:layout_width="match_parent"
-                android:layout_height="79dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/ver_Revista_mais_cara"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/reload"
-                    android:padding="10dp"
-                    android:text="Revista mais cara"
-                    android:textColor="#fff"
-                    aid:textSize="20dp"
-                    android:visibility="visible" />
-
-
-                        <ProgressBar
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-        </LinearLayout>
--->
-    <!--
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerComics"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    -->
-</LinearLayout>

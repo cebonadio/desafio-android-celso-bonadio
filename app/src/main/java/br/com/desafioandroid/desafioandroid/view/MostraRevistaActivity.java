@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,11 +57,13 @@ public class MostraRevistaActivity extends AppCompatActivity {
             String preco = "Preço: " + revista.getPreco();
             Glide.with(this)
                     .load(revista.getUrl())
-                    .apply(RequestOptions.centerCropTransform())
+                    //.apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.centerInsideTransform())
                     .into(img_revista);
 
             nome_revista.setText(revista.getNome());
             preco_revista.setText(preco);
+            descricao_revista.setMovementMethod(new ScrollingMovementMethod());
             descricao_revista.setText(revista.getDescricao());
 
         }

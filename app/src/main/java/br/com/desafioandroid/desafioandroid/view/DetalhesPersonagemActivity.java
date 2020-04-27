@@ -3,9 +3,11 @@ package br.com.desafioandroid.desafioandroid.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,7 @@ import br.com.desafioandroid.desafioandroid.R;
 import br.com.desafioandroid.desafioandroid.adapter.ComicsAdapter;
 import br.com.desafioandroid.desafioandroid.extras.Chaves;
 import br.com.desafioandroid.desafioandroid.extras.Util;
+import br.com.desafioandroid.desafioandroid.model.Preco;
 import br.com.desafioandroid.desafioandroid.model.Revista;
 import br.com.desafioandroid.desafioandroid.model.comics_.Exemplo;
 import br.com.desafioandroid.desafioandroid.presenter.InicializarRetrofit;
@@ -88,12 +91,14 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
         Util util = new Util();
 
         txt_personagem.setText(name);
+        txt_descricao.setMovementMethod(new ScrollingMovementMethod());
         txt_descricao.setText(descricao);
 
 
         Glide.with(this)
                 .load(url)
-                .apply(RequestOptions.centerCropTransform())
+                //.apply(RequestOptions.centerCropTransform())
+                .apply(RequestOptions.centerInsideTransform())
                 .into(imageView);
 
         buttonRevCara.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +146,9 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
                                             precos.add(preco);
                                         }
                                         if (precos.size() > 0) {
-                                            precos.sort(String::compareToIgnoreCase);
+                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                                    precos.sort(String::compareToIgnoreCase);
+                                                }
                                             Preco ep = new Preco();
                                             ep.setIndice(i);
                                             ep.setPreco(precos.get(tot_preco - 1));
@@ -230,69 +237,6 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
             }
         });
     }
-
-    public class Preco {
-
-        private int indice_revista;
-        private String preco;
-
-        public int getIndice() {
-            return indice_revista;
-        }
-
-        public void setIndice(int indice) {
-            this.indice_revista = indice;
-        }
-
-        public String getPreco() {
-            return preco;
-        }
-
-        public void setPreco(String preco) {
-            this.preco = preco;
-        }
-    }
-
-    /*
-    public class Revista implements Serializable {
-
-        private String nome;
-
-        private String descricao;
-
-        private String url;
-
-        private String preco;
-
-        public String getNome() {
-            return nome;
-        }
-        public void setNome(String nome) {
-            this.nome = nome;
-        }
-
-        public String getDescricao() {
-            return descricao;
-        }
-        public void setDescricao(String descricao) {
-            this.descricao = descricao;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getPreco() {
-            return preco;
-        }
-        public void setPreco(String preco) {
-            this.preco = preco;
-        }
-    }
-*/
 
 }
 
