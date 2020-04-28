@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,7 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
     //private android.support.v7.widget.RecyclerView recyclerView;
     private Button buttonReload;
     private Button buttonRevCara;
-    private LinearLayout loading;
+    private RelativeLayout loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,9 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
         txt_personagem = findViewById(R.id.det_txt_nome_personagem);
         txt_descricao = findViewById(R.id.det_txt_descricao_personagem);
         //recyclerView = findViewById(R.id.recyclerComics);
-        ///loading = findViewById(R.id.details_loading);
+        loading = findViewById(R.id.details_loading);
+        loading.setVisibility(View.VISIBLE);
+
         buttonReload = findViewById(R.id.details_Reload);
         buttonRevCara = findViewById(R.id.ver_revista_mais_cara);
 
@@ -108,14 +111,12 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
             }
         });
 
-
-
+        loading.setVisibility(View.GONE);
         ///carregaLista(util);
-
-
     }
 
     private void carregaLista(final Util util) {
+        loading.setVisibility(View.VISIBLE);
         try {
             InicializarRetrofit
                     .getGsonComics(id)
@@ -133,80 +134,86 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
 
                                     comicsList = new ArrayList<>();
                                     precosList = new ArrayList<>();
-                                    for (int i = 0; i < total; i++) {
+                                    if (total > 0) {
+                                        for (int i = 0; i < total; i++) {
 
-                                        String extension = response.body().getData().getResults().get(i).getThumbnail().getExtension();
-                                        String url = response.body().getData().getResults().get(i).getThumbnail().getPath() + "." + extension;
+                                            String extension = response.body().getData().getResults().get(i).getThumbnail().getExtension();
+                                            String url = response.body().getData().getResults().get(i).getThumbnail().getPath() + "." + extension;
 
-                                        List<String> precos;
-                                        precos = new ArrayList<>();
-                                        int tot_preco = response.body().getData().getResults().get(i).getPrices().size();
-                                        for (int j = 0; j < tot_preco; j++) {
-                                            String preco = response.body().getData().getResults().get(i).getPrices().get(j).getPrice();
-                                            precos.add(preco);
-                                        }
-                                        if (precos.size() > 0) {
-                                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                            List<String> precos;
+                                            precos = new ArrayList<>();
+                                            int tot_preco = response.body().getData().getResults().get(i).getPrices().size();
+                                            for (int j = 0; j < tot_preco; j++) {
+                                                String preco = response.body().getData().getResults().get(i).getPrices().get(j).getPrice();
+                                                precos.add(preco);
+                                            }
+                                            if (precos.size() > 0) {
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                                     precos.sort(String::compareToIgnoreCase);
                                                 }
-                                            Preco ep = new Preco();
-                                            ep.setIndice(i);
-                                            ep.setPreco(precos.get(tot_preco - 1));
-                                            precosList.add(ep);
+                                                Preco ep = new Preco();
+                                                ep.setIndice(i);
+                                                ep.setPreco(precos.get(tot_preco - 1));
+                                                precosList.add(ep);
+                                            }
+                                            comicsList.add(url);
+
+
+                                            //if (comicsList.size() != 0) {
+                                            //recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                                            //recyclerView.setAdapter(new ComicsAdapter(activity, comicsList));
+                                            //loading.setVisibility(View.GONE);
+                                            //}
+
                                         }
-                                        comicsList.add(url);
-
-
-                                        //if (comicsList.size() != 0) {
+                                        if (precosList.size() > 0) {
+                                            Collections.sort(precosList, new Comparator() {
+                                                @Override
+                                                public int compare(Object o1, Object o2) {
+                                                    Preco p1 = (Preco) o1;
+                                                    Preco p2 = (Preco) o2;
+                                                    return p1.getPreco().compareToIgnoreCase(p2.getPreco());
+                                                }
+                                            });
+                                        }
+                                        Preco maior_preco = precosList.get(precosList.size() - 1);
+                                        System.out.println("Maior preco = " + maior_preco.getPreco());
+                                        System.out.println("Indice = " + maior_preco.getIndice());
+                                        int indice_rev = maior_preco.getIndice();
+                                        ///Revista revista = new Revista();
+                                        Revista revista = new Revista();
+                                        String extension = response.body().getData().getResults().get(indice_rev).getThumbnail().getExtension();
+                                        String url = response.body().getData().getResults().get(indice_rev).getThumbnail().getPath() + "." + extension;
+                                        revista.setUrl(url);
+                                        revista.setNome(response.body().getData().getResults().get(indice_rev).getTitle());
+                                        revista.setDescricao(response.body().getData().getResults().get(indice_rev).getDescription());
+                                        revista.setPreco(maior_preco.getPreco());
                                         //recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                                         //recyclerView.setAdapter(new ComicsAdapter(activity, comicsList));
                                         //loading.setVisibility(View.GONE);
-                                        //}
 
+                                        revistasList = new ArrayList<>();
+                                        revistasList.add(revista);
+                                        Intent goShowRev = new Intent(DetalhesPersonagemActivity.this, MostraRevistaActivity.class);
+                                        //goShowRev.putCharSequenceArrayListExtra("lst_revistas",revistasList);
+                                        //pode haver mais de uma revista com o mesmo e maior preço
+                                        //neste caso deveria ser mostrada uma lista com todas
+                                        //goShowRev.putExtra("lst_revistas",  revistasList);
+                                        if (revista != null) {
+                                            goShowRev.putExtra("revista", revista);
+                                        }
+                                        loading.setVisibility(View.GONE);
+                                        DetalhesPersonagemActivity.this.startActivity(goShowRev);
+                                    } else {
+                                        loading.setVisibility(View.GONE);
+                                        Toast.makeText(context, "Não foi encontrada nenhuma revista para o personagem!", Toast.LENGTH_SHORT).show();
                                     }
-                                    if (precosList.size() > 0) {
-                                        Collections.sort(precosList, new Comparator() {
-                                            @Override
-                                            public int compare(Object o1, Object o2) {
-                                                Preco p1 = (Preco) o1;
-                                                Preco p2 = (Preco) o2;
-                                                return p1.getPreco().compareToIgnoreCase(p2.getPreco());
-                                            }
-                                        });
-                                    }
-                                    Preco maior_preco = precosList.get(precosList.size() - 1);
-                                    System.out.println("Maior preco = " + maior_preco.getPreco());
-                                    System.out.println("Indice = " + maior_preco.getIndice());
-                                    int indice_rev = maior_preco.getIndice();
-                                    ///Revista revista = new Revista();
-                                    Revista revista = new Revista();
-                                    String extension = response.body().getData().getResults().get(indice_rev).getThumbnail().getExtension();
-                                    String url = response.body().getData().getResults().get(indice_rev).getThumbnail().getPath() + "." + extension;
-                                    revista.setUrl(url);
-                                    revista.setNome(response.body().getData().getResults().get(indice_rev).getTitle());
-                                    revista.setDescricao(response.body().getData().getResults().get(indice_rev).getDescription());
-                                    revista.setPreco(maior_preco.getPreco());
-                                    //recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                                    //recyclerView.setAdapter(new ComicsAdapter(activity, comicsList));
-                                    //loading.setVisibility(View.GONE);
-
-                                    revistasList = new ArrayList<>();
-                                    revistasList.add(revista);
-                                    Intent goShowRev = new Intent(DetalhesPersonagemActivity.this, MostraRevistaActivity.class);
-                                    //goShowRev.putCharSequenceArrayListExtra("lst_revistas",revistasList);
-                                    //goShowRev.putExtra("lst_revistas",  revistasList);
-                                    if (revista != null) {
-                                        goShowRev.putExtra("revista", revista);
-                                    }
-                                    DetalhesPersonagemActivity.this.startActivity(goShowRev);
-
                                 } else {
                                     errorAPI(util);
                                 }
-
-
                             } catch (IOError error) {
-                                Toast.makeText(context, "Não foi possível carregar os dados :(", Toast.LENGTH_SHORT).show();
+                                loading.setVisibility(View.GONE);
+                                Toast.makeText(context, "Não foi possível carregar os dados!", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -214,14 +221,15 @@ public class DetalhesPersonagemActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<Exemplo> call, Throwable t) {
                             System.out.println("Requisição errada!");
+                            loading.setVisibility(View.GONE);
                             Toast.makeText(DetalhesPersonagemActivity.this, "Problemas com a conexão!", Toast.LENGTH_SHORT).show();
-                            ///loading.setVisibility(View.GONE);
                             errorAPI(util);
                         }
                     });
 
         } catch (IOError e) {
             e.printStackTrace();
+            loading.setVisibility(View.GONE);
             Toast.makeText(activity, "Não foi possível carregar os dados :(", Toast.LENGTH_SHORT).show();
         }
     }

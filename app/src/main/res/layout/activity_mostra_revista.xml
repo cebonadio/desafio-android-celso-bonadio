@@ -86,4 +86,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/det_txt_preco_revista" />
 
+    <RelativeLayout
+        android:id="@+id/rev_mais_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

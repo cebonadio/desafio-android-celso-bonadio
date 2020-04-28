@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +33,7 @@ public class MostraRevistaActivity extends AppCompatActivity {
     private List<String> comicsList;
     Context context = MostraRevistaActivity.this;
     Activity activity = MostraRevistaActivity.this;
+    private RelativeLayout loading;
     private ImageView img_revista; //det_img_revista;
     private TextView nome_revista; //det_txt_nome_revista;
     private TextView preco_revista; //det_txt_preco_revista;
@@ -47,6 +49,8 @@ public class MostraRevistaActivity extends AppCompatActivity {
         preco_revista = findViewById(R.id.det_txt_preco_revista);
         descricao_revista = findViewById(R.id.det_txt_descricao_revista);
         activity = MostraRevistaActivity.this;
+        loading = findViewById(R.id.rev_mais_loading);
+        loading.setVisibility(View.VISIBLE);
 
         comicsList = new ArrayList<>();
         revistas = new ArrayList<>();
@@ -67,6 +71,6 @@ public class MostraRevistaActivity extends AppCompatActivity {
             descricao_revista.setText(revista.getDescricao());
 
         }
-
+        loading.setVisibility(View.GONE);
     }
 }
